@@ -1,59 +1,23 @@
-import 'package:fashion_store/pages/signup.dart';
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-// import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:fluttertoast/fluttertoast.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-// import 'package:fluttertoast/fluttertoast.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'home.dart';
+import 'package:flutter/material.dart';
 
-class Login extends StatefulWidget {
+class SignUp extends StatefulWidget {
+  SignUp({Key key}) : super(key: key);
+
   @override
-  _LoginState createState() => _LoginState();
+  _SignUpState createState() => _SignUpState();
 }
 
-class _LoginState extends State<Login> {
-  final GoogleSignIn googleSignIn = GoogleSignIn();
+class _SignUpState extends State<SignUp> {
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 
   final _formKey = GlobalKey<FormState>();
 
   TextEditingController _emailTextController = TextEditingController();
   TextEditingController _passwordTextController = TextEditingController();
-
-  SharedPreferences preferences;
+  TextEditingController _confirmPasswordController = TextEditingController();
+  TextEditingController _nameController = TextEditingController();
   bool loading = false;
-  bool isLogedIn = false;
-
-  @override
-  void initState() {
-    super.initState(); // Call the initial state of base class
-    isSignedIn();
-  }
-
-  void isSignedIn() async {
-    setState(() {
-      loading = true;
-    });
-
-    if (isLogedIn) {
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (contxt) => HomePage()));
-    }
-
-    setState(() {
-      loading = false;
-    });
-  }
-
-  // Future handleSignIn() async {
-  //   preferences = await SharedPreferences.getInstance();
-
-  //   setState(() {
-  //     loading = true;
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -66,6 +30,7 @@ class _LoginState extends State<Login> {
           height: double.infinity,
           width: double.infinity,
         ),
+        
         Padding(
           padding: const EdgeInsets.only(top: 200.0),
           child: Center(
@@ -73,6 +38,31 @@ class _LoginState extends State<Login> {
                 key: _formKey,
                 child: ListView(
                   children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Material(
+                        borderRadius: BorderRadius.circular(20.0),
+                        color: Colors.white.withOpacity(0.8),
+                        elevation: 0.0,
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 12.0),
+                          child: TextFormField(
+                            controller: _nameController,
+                            decoration: InputDecoration(
+                              hintText: "Name",
+                              icon: Icon(Icons.person),
+                            ),
+                            keyboardType: TextInputType.emailAddress,
+                            validator: (value) {
+                              if (value.isEmpty) {
+                                return "Name cannot be empty";
+                                }
+                            return null;
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Material(
@@ -136,13 +126,40 @@ class _LoginState extends State<Login> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Material(
+                        borderRadius: BorderRadius.circular(20.0),
+                        color: Colors.white.withOpacity(0.8),
+                        elevation: 0.0,
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 12.0),
+                          child: TextFormField(
+                            controller: _confirmPasswordController,
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              hintText: "Confirm Password",
+                              icon: Icon(Icons.lock_outline),
+                            ),
+                            validator: (value) {
+                              if (value.isEmpty) {
+                                return "The password field cannot be empty";
+                              } else if (value.length < 6) {
+                                return "the password has to be at least 6 characters long";
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Material(
                           borderRadius: BorderRadius.circular(20.0),
                           color: Colors.red.withOpacity(0.9),
                           elevation: 0.0,
                           child: MaterialButton(
                             onPressed: () {},
                             minWidth: MediaQuery.of(context).size.width,
-                            child: Text('Login',
+                            child: Text('Registers',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     color: Colors.white,
@@ -151,28 +168,13 @@ class _LoginState extends State<Login> {
                           )),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(top: 10.0),
-                      child: Text('Forgot Password',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white)),
-                    ),
-                    Padding(
                       padding: EdgeInsets.all(8.0),
                       child: InkWell(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => SignUp()));
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 10.0),
-                            child: Text('Sign up',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(fontWeight: FontWeight.bold,color: Colors.red)),
-                          )),
+                          onTap: () { Navigator.pop(context);},
+                          child: Text('Login',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(fontWeight: FontWeight.bold,color: Colors.red)),
+                    )
                     )
                   ],
                 )),
