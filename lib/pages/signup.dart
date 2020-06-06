@@ -20,7 +20,7 @@ class _SignUpState extends State<SignUp> {
   TextEditingController _emailTextController = TextEditingController();
   TextEditingController _passwordTextController = TextEditingController();
   TextEditingController _confirmPasswordController = TextEditingController();
-  TextEditingController _nameController = TextEditingController();
+  TextEditingController _nameTextController = TextEditingController();
   bool loading = false;
   String gender;
   String groupValue = "male";
@@ -53,7 +53,7 @@ class _SignUpState extends State<SignUp> {
                         child: Padding(
                           padding: const EdgeInsets.only(left: 12.0),
                           child: TextFormField(
-                            controller: _nameController,
+                            controller: _nameTextController,
                             decoration: InputDecoration(
                               hintText: "Name",
                               icon: Icon(Icons.person),
@@ -218,7 +218,7 @@ class _SignUpState extends State<SignUp> {
                           color: Colors.red.withOpacity(0.9),
                           elevation: 0.0,
                           child: MaterialButton(
-                            onPressed: () {
+                            onPressed: () async {
                               validateForm();
                             },
                             minWidth: MediaQuery.of(context).size.width,
@@ -273,10 +273,11 @@ class _SignUpState extends State<SignUp> {
     });
   }
 
-  void validateForm() async {
+  Future validateForm() async {
     FormState formState = _formKey.currentState;
 
     if (formState.validate()) {
+      formState.reset();
       FirebaseUser user = await firebaseAuth.currentUser();
       if (user == null) {
         await firebaseAuth
@@ -284,9 +285,9 @@ class _SignUpState extends State<SignUp> {
                 email: _emailTextController.text,
                 password: _passwordTextController.text)
             .then((user) => {
-                  _userServices.createUser(user.user.uid, {
-                    "username": user.user.displayName,
-                    "email": user.user.email,
+                  _userServices.createUser({
+                    "username": _nameTextController.text,
+                    "email": _emailTextController.text,
                     "userId": user.user.uid,
                     "gender": gender
                   })
