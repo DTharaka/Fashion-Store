@@ -5,7 +5,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 // import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:fluttertoast/fluttertoast.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'home.dart';
 
 class Login extends StatefulWidget {
@@ -14,7 +13,6 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  final GoogleSignIn googleSignIn = GoogleSignIn();
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 
   final _formKey = GlobalKey<FormState>();
@@ -156,6 +154,7 @@ class _LoginState extends State<Login> {
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
+                              fontSize: 15.0,
                               color: Colors.white)),
                     ),
                     Padding(
@@ -171,7 +170,7 @@ class _LoginState extends State<Login> {
                             padding: const EdgeInsets.only(top: 10.0),
                             child: Text('Sign up',
                                 textAlign: TextAlign.center,
-                                style: TextStyle(fontWeight: FontWeight.bold,color: Colors.red)),
+                                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0, color: Colors.blue)),
                           )),
                     )
                   ],
